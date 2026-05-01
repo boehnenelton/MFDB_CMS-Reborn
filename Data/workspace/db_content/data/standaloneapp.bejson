@@ -1,0 +1,65 @@
+{
+  "Format": "BEJSON",
+  "Format_Version": "104",
+  "Format_Creator": "Elton Boehnen",
+  "Parent_Hierarchy": "../104a.mfdb.bejson",
+  "Records_Type": [
+    "StandaloneApp"
+  ],
+  "Fields": [
+    {
+      "name": "app_uuid",
+      "type": "string"
+    },
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "slug",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "category_fk",
+      "type": "string"
+    },
+    {
+      "name": "featured_img",
+      "type": "string"
+    },
+    {
+      "name": "entry_file",
+      "type": "string"
+    },
+    {
+      "name": "created_at",
+      "type": "string"
+    }
+  ],
+  "Values": [
+    [
+      "883101c3-a2da-47fb-a4d6-a8d05503efcb",
+      "BEJSON Unified Editor v1.1.3",
+      "bejson-unified-editor-v1-1-3",
+      "The most advanced BEJSON editor featuring Gemini 3.1 Pro integration, AES-256-GCM encryption, and multi-pane IDE layout.",
+      "apps",
+      "unified-editor-v113.png",
+      "index.html",
+      "2026-04-28T01:42:06Z"
+    ],
+    [
+      "187bbfbc-5b5a-456d-a6b1-d54ac9178547",
+      "BEJSON Vanilla Editor v7.4",
+      "bejson-vanilla-editor-v7-4",
+      "The industrial-grade BEJSON editor focusing on data integrity, AES-256-GCM encryption, and precise field management.",
+      "apps",
+      "vanilla-editor-v74.png",
+      "index.html",
+      "2026-04-28T01:44:39Z"
+    ]
+  ]
+}

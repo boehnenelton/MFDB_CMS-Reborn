@@ -1,0 +1,47 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Featured Image at top -->
+    {% if featured_img_url %}
+    <div class="mb-12 rounded-2xl overflow-hidden border border-brand-surfaceBorder shadow-2xl">
+        <img src="{{ featured_img_url }}" alt="{{ page_title }}" class="w-full h-auto object-cover max-h-[500px]">
+    </div>
+    {% endif %}
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        <div class="flex-grow lg:w-2/3">
+            <div class="aspect-video rounded-xl overflow-hidden bg-black border border-brand-surfaceBorder shadow-2xl relative">
+                <!-- Simple embed logic or placeholder -->
+                <iframe class="absolute inset-0 w-full h-full" src="{{ video_url }}" frameborder="0" allowfullscreen></iframe>
+            </div>
+
+            <div class="mt-6">
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="tag-font text-brand-red text-xs font-bold px-2 py-1 bg-brand-red/10 border border-brand-red/20 rounded uppercase">{{ category_name }}</span>
+                </div>
+                <h1 class="text-3xl font-inter font-extrabold mb-4 leading-tight">{{ page_title }}</h1>
+                
+                <div class="mt-6 bg-brand-surface p-6 rounded-xl border border-brand-surfaceBorder">
+                    <p class="text-gray-300 font-roboto text-md leading-relaxed">
+                        {{ html_body | safe }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Placeholder for playlist or related -->
+        <aside class="lg:w-1/3">
+            <h2 class="font-inter font-bold text-lg mb-4 flex items-center gap-2">
+                <i data-lucide="list-video" class="w-5 h-5 text-brand-red"></i> More from {{ category_name }}
+            </h2>
+            <div class="space-y-4">
+                {% for rp in related_pages %}
+                <a href="../{{ rp.slug }}/index.html" class="bg-brand-surface border border-brand-surfaceBorder p-3 rounded-xl hover:border-gray-500 transition-all flex gap-4 group">
+                    <img src="{{ rp.featured_img_url }}" class="w-20 h-20 rounded-lg object-cover bg-black" onerror="this.src='https://placehold.co/100x100/171717/fe3626?text=VIDEO'">
+                    <div class="flex flex-col justify-center">
+                        <h4 class="font-bold text-sm group-hover:text-brand-red transition-colors line-clamp-2">{{ rp.title }}</h4>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </aside>
+    </div>
+</div>

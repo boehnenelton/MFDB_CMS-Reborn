@@ -1,0 +1,25 @@
+{
+  "project_name": "MyProject",
+  "version": "1.0.0",
+  "extensions": [
+    ".py",
+    ".js",
+    ".ts",
+    ".html",
+    ".css",
+    ".md",
+    ".json",
+    ".sh",
+    ".txt",
+    ".bejson"
+  ],
+  "exclude_dirs": [
+    ".git",
+    "__pycache__",
+    "node_modules",
+    "lib",
+    "output",
+    ".mfdb_lock"
+  ],
+  "output_base": "/storage/emulated/0/dev/cli/cli_chunker/output"
+}

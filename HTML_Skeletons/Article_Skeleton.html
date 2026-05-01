@@ -1,0 +1,58 @@
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+    <header class="mb-16">
+        <div class="flex items-center gap-4 mb-6">
+            <span class="tag-font text-brand-red text-xs font-bold px-2 py-1 bg-brand-red/10 border border-brand-red/20 rounded uppercase">{{ category_name }}</span>
+            <span class="text-gray-500 text-xs tag-font uppercase">{{ created_at }}</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-inter font-black mb-8 leading-tight">{{ page_title }}</h1>
+    </header>
+
+    {% if featured_img_url %}
+    <div class="mb-12 rounded-2xl overflow-hidden border border-brand-surfaceBorder shadow-2xl">
+        <img src="{{ featured_img_url }}" alt="{{ page_title }}" class="w-full h-auto object-cover max-h-[500px]">
+    </div>
+    {% endif %}
+
+    <article class="prose prose-invert max-w-none font-roboto text-lg leading-relaxed text-gray-300">
+        {{ html_body | safe }}
+    </article>
+
+    <!-- Author Profile Section -->
+    {% if author %}
+    <div class="mt-16 p-8 bg-brand-surface border border-brand-surfaceBorder rounded-2xl flex items-center gap-6">
+        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-brand-red bg-black/40 flex-shrink-0">
+            <img src="{{ author_img_url }}" alt="{{ author.name }}" class="w-full h-full object-contain">
+        </div>
+        <div>
+            <h3 class="font-inter font-bold text-xl text-white">{{ author.name }}</h3>
+            <p class="text-gray-400 text-sm mt-2 leading-relaxed">{{ author.bio }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Related Content Section -->
+    {% if related_pages %}
+    <div class="mt-24">
+        <h3 class="font-inter font-bold text-2xl mb-8 flex items-center gap-3">
+            <i data-lucide="layers" class="text-brand-red"></i> More from {{ category_name }}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for rp in related_pages %}
+            <a href="../{{ rp.slug }}/index.html" class="bg-brand-surface border border-brand-surfaceBorder p-4 rounded-xl hover:border-gray-500 transition-all flex gap-4 group">
+                <img src="{{ rp.featured_img_url }}" class="w-24 h-24 rounded-lg object-cover bg-black" onerror="this.src='https://placehold.co/100x100/171717/fe3626?text=POST'">
+                <div class="flex flex-col justify-center">
+                    <h4 class="font-bold group-hover:text-brand-red transition-colors line-clamp-2">{{ rp.title }}</h4>
+                    <span class="text-xs text-gray-500 mt-2 font-mono">Read More &rarr;</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <footer class="mt-16 pt-8 border-t border-brand-surfaceBorder">
+        <div class="flex flex-wrap gap-2">
+            <!-- Dynamic tags could go here -->
+        </div>
+    </footer>
+</main>

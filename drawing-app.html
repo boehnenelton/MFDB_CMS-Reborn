@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusDraw | Minimalist Utility</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background: #0a0a0a; color: #fff; overflow: hidden; font-family: sans-serif; }
+        canvas { cursor: crosshair; touch-action: none; }
+        .tool-btn.active { border-color: #DE2626; color: #DE2626; background: rgba(222, 38, 38, 0.1); }
+        .color-btn.active { ring: 2px offset 2px #fff; }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Toolbar -->
+    <header class="bg-[#171717] border-b border-gray-800 p-4 flex justify-between items-center z-10 shadow-2xl">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 pr-6 border-r border-gray-800">
+                <span class="font-bold text-red-500 tracking-tighter uppercase italic">Nexus<span class="text-white">Draw</span></span>
+            </div>
+            
+            <!-- Tools -->
+            <div class="flex gap-2">
+                <button onclick="setTool('brush')" id="btn-brush" class="tool-btn p-2 rounded border border-transparent hover:bg-gray-800 active" title="Brush"><i data-lucide="brush" class="w-5 h-5"></i></button>
+                <button onclick="setTool('line')" id="btn-line" class="tool-btn p-2 rounded border border-transparent hover:bg-gray-800" title="Line"><i data-lucide="minus" class="w-5 h-5"></i></button>
+                <button onclick="setTool('square')" id="btn-square" class="tool-btn p-2 rounded border border-transparent hover:bg-gray-800" title="Square"><i data-lucide="square" class="w-5 h-5"></i></button>
+                <button onclick="setTool('text')" id="btn-text" class="tool-btn p-2 rounded border border-transparent hover:bg-gray-800" title="Text"><i data-lucide="type" class="w-5 h-5"></i></button>
+            </div>
+
+            <!-- Colors -->
+            <div class="flex gap-3 ml-4">
+                <button onclick="setColor('#000000')" id="color-black" class="color-btn w-6 h-6 rounded-full bg-black border border-gray-600 active" title="Black"></button>
+                <button onclick="setColor('#FFFFFF')" id="color-white" class="color-btn w-6 h-6 rounded-full bg-white border border-gray-600" title="White"></button>
+                <button onclick="setColor('#DE2626')" id="color-red" class="color-btn w-6 h-6 rounded-full bg-[#DE2626] border border-gray-600" title="Red"></button>
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <button onclick="clearCanvas()" class="text-xs font-bold text-gray-500 hover:text-red-500 uppercase tracking-widest">Clear Canvas</button>
+            <button onclick="download()" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded font-bold text-sm">EXPORT PNG</button>
+        </div>
+    </header>
+
+    <!-- Canvas Area -->
+    <main class="flex-grow relative bg-[#050505] overflow-hidden">
+        <canvas id="canvas"></canvas>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        let tool = 'brush';
+        let color = '#000000';
+        let startX, startY;
+        let snapshot;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx.fillStyle = '#FFFFFF'; // Start with white paper or black? Let's do white background.
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function setTool(t) {
+            tool = t;
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + t).classList.add('active');
+        }
+
+        function setColor(c) {
+            color = c;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            if(c === '#000000') document.getElementById('color-black').classList.add('active');
+            if(c === '#FFFFFF') document.getElementById('color-white').classList.add('active');
+            if(c === '#DE2626') document.getElementById('color-red').classList.add('active');
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            startX = e.clientX || e.touches[0].clientX;
+            startY = (e.clientY || e.touches[0].clientY) - 64; // Adjust for header
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const currentX = e.clientX || e.touches[0].clientX;
+            const currentY = (e.clientY || e.touches[0].clientY) - 64;
+
+            if (tool === 'brush') {
+                ctx.lineTo(currentX, currentY);
+                ctx.stroke();
+            } else {
+                ctx.putImageData(snapshot, 0, 0);
+                if (tool === 'line') {
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(currentX, currentY);
+                    ctx.stroke();
+                } else if (tool === 'square') {
+                    ctx.strokeRect(startX, startY, currentX - startX, currentY - startY);
+                }
+            }
+        }
+
+        function stopDrawing(e) {
+            if (!drawing) return;
+            if (tool === 'text') {
+                const txt = prompt("Enter text:");
+                if (txt) {
+                    ctx.font = '24px sans-serif';
+                    ctx.fillText(txt, startX, startY);
+                }
+            }
+            drawing = false;
+        }
+
+        function clearCanvas() {
+            if(confirm("Wipe everything?")) {
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function download() {
+            const link = document.createElement('a');
+            link.download = 'nexus-sketch.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
