@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | {{ site_title }}</title>
+    
+    <!-- SEO & Meta Tags -->
+    <meta name="description" content="{{ seo_description or site_tagline }}">
+    <meta name="keywords" content="MFDB, Vanilla JS, Dark Theme, {{ category_name or 'CMS' }}">
+    <meta property="og:title" content="{{ page_title }} | {{ site_title }}">
+    <meta property="og:description" content="{{ seo_description or site_tagline }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ rel_prefix }}assets/{{ featured_img or 'og-default.png' }}">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#fe3626',
+                            redHover: '#d92c1e',
+                            dark: '#0a0a0a',
+                            surface: '#171717',
+                            surfaceBorder: '#262626'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        roboto: ['Roboto', 'sans-serif'],
+                        mono: ['Source Code Pro', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fe3626; }
+        #sidebar { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
+        #sidebar.open { transform: translateX(0); }
+        #overlay { transition: opacity 0.3s ease-in-out; opacity: 0; pointer-events: none; }
+        #overlay.open { opacity: 1; pointer-events: auto; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Roboto', sans-serif; }
+        .tag-font { font-family: 'Source Code Pro', monospace; }
+        
+        .fold-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .fold-content.open { max-height: 1000px; transition: max-height 0.5s ease-in; }
+        .chevron-rotate { transition: transform 0.3s ease; }
+        .open .chevron-rotate { transform: rotate(180deg); }
+
+        /* Automatic HTML Formatting */
+        .auto-format { line-height: 1.8; color: #d0d0d0; }
+        .auto-format section { margin-bottom: 40px; padding: 20px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid #222; }
+        .auto-format h1 { color: #fe3626; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #fe3626; padding-bottom: 10px; margin-bottom: 25px; }
+        .auto-format h2 { color: #fe3626; font-size: 1.6rem; margin-top: 30px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        .auto-format h3 { color: #fff; font-size: 1.2rem; margin-top: 20px; border-left: 3px solid #fe3626; padding-left: 12px; }
+        .auto-format p { margin-bottom: 15px; text-align: justify; color: #bbb; }
+        .auto-format b, .auto-format strong { color: #fe3626; font-weight: 800; }
+        .auto-format i, .auto-format em { color: #fe3626; }
+        .auto-format code { background: #000; color: #fe3626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9rem; border: 1px solid #333; }
+        .auto-format ul { list-style: none; padding-left: 0; margin-bottom: 20px; }
+        .auto-format li { position: relative; padding-left: 25px; margin-bottom: 10px; color: #ccc; }
+        .auto-format li::before { content: '→'; position: absolute; left: 0; color: #fe3626; font-weight: bold; }
+        .auto-format hr { border: 0; border-top: 1px solid #333; margin: 30px 0; }
+    </style>
+</head>
+<body class="bg-brand-dark text-white min-h-screen flex flex-col selection:bg-brand-red selection:text-white">
+
+    <header role="banner" class="sticky top-0 z-40 bg-brand-surface/90 backdrop-blur-md border-b border-brand-surfaceBorder">
+        <!-- Header Ad Slot -->
+        {% if ad_header %}
+        <div class="bg-black py-2 border-b border-brand-surfaceBorder">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center">
+                <a href="{{ ad_header.link_url }}" target="_blank" aria-label="Advertisement">
+                    <img src="{{ rel_prefix }}assets/{{ ad_header.image_url }}" alt="{{ ad_header.name }}" class="h-10 w-auto">
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-4">
+                    <button id="menu-btn" class="p-2 text-gray-300 hover:text-brand-red transition-colors focus:outline-none" aria-label="Open sidebar menu" aria-expanded="false" aria-controls="sidebar">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <a href="{{ rel_prefix }}index.html" class="flex items-center gap-2" aria-label="{{ site_title }} Home">
+                        <img src="{{ rel_prefix }}assets/logo.png" alt="{{ site_title }}" class="h-8 w-auto rounded" onerror="this.src='https://placehold.co/150x40/171717/fe3626?text={{ site_title }}'">
+                        <span class="font-inter font-bold text-xl tracking-tight hidden sm:block">boehnenelton<span class="text-brand-red">2024</span></span>
+                    </a>
+                </div>
+
+                <nav role="navigation" aria-label="Main Navigation" class="hidden lg:flex space-x-6 font-inter font-semibold text-sm">
+                    {% for link in nav_links %}
+                    <a href="{{ rel_prefix }}{{ link.url }}" class="text-gray-300 hover:text-brand-red transition-colors">{{ link.label }}</a>
+                    {% endfor %}
+                </nav>
+
+                <div class="flex items-center gap-4">
+                    <button class="p-2 text-gray-300 hover:text-brand-red transition-colors" aria-label="Search content">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="overlay" class="fixed inset-0 bg-black/70 z-40 backdrop-blur-sm" aria-hidden="true"></div>
+    <aside id="sidebar" role="navigation" aria-label="Sidebar navigation" class="fixed top-0 left-0 h-full w-72 bg-brand-surface border-r border-brand-surfaceBorder z-50 flex flex-col shadow-2xl">
+        <div class="p-4 border-b border-brand-surfaceBorder flex justify-between items-center">
+            <span class="font-inter font-bold text-xl">{{ site_title }}</span>
+            <button id="close-btn" class="p-2 text-gray-400 hover:text-brand-red transition-colors" aria-label="Close sidebar menu">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1 font-inter font-medium">
+            
+            <!-- Home Link -->
+            <a href="{{ rel_prefix }}index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-brand-surfaceBorder hover:text-brand-red transition-all mb-4">
+                <i data-lucide="home" class="w-5 h-5"></i> Home
+            </a>
+
+            <!-- Custom Navigation Links -->
+            <div class="text-xs text-gray-500 uppercase tracking-wider mb-2 ml-2 tag-font">Quick Links</div>
+            {% for link in nav_links %}
+            <a href="{{ rel_prefix }}{{ link.url }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-brand-surfaceBorder hover:text-brand-red transition-all">
+                <i data-lucide="link" class="w-4 h-4 text-gray-500"></i> {{ link.label }}
+            </a>
+            {% endfor %}
+
+            <!-- Collapsible Categories -->
+            <div class="mt-8">
+                <button onclick="toggleFold('cat-fold')" class="w-full flex items-center justify-between px-2 py-2 text-xs text-gray-500 uppercase tracking-wider tag-font hover:text-brand-red transition-colors focus:outline-none">
+                    <span>Explore Categories</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 chevron-rotate"></i>
+                </button>
+                <div id="cat-fold" class="fold-content open space-y-1 mt-2">
+                    {% for cat in categories %}
+                    <a href="{{ rel_prefix }}{{ cat.slug }}/index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-brand-surfaceBorder hover:text-brand-red transition-all">
+                        <i data-lucide="folder" class="w-5 h-5"></i> {{ cat.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sidebar Ad Slot -->
+            {% if ad_sidebar %}
+            <div class="mt-8 px-4">
+                <div class="text-xs text-gray-500 uppercase tracking-wider mb-2 tag-font">Sponsor</div>
+                <a href="{{ ad_sidebar.link_url }}" target="_blank" class="block border border-brand-surfaceBorder rounded-lg overflow-hidden" aria-label="Advertisement">
+                    <img src="{{ rel_prefix }}assets/{{ ad_sidebar.image_url }}" alt="{{ ad_sidebar.name }}" class="w-full h-auto">
+                </a>
+            </div>
+            {% endif %}
+        </nav>
+    </aside>
+
+    <main role="main" class="flex-grow">
+        {% if breadcrumbs_html %}
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 -mb-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-gray-500">
+            {{ breadcrumbs_html | safe }}
+        </nav>
+        {% endif %}
+        {{ main_content }}
+    </main>
+
+    <footer role="contentinfo" class="bg-brand-surface border-t border-brand-surfaceBorder mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col items-center text-center">
+                <span class="font-inter font-bold text-2xl block mb-4">{{ site_title }}</span>
+                <p class="text-gray-400 text-sm max-w-sm mb-6">
+                    {{ site_tagline }}
+                </p>
+                <div class="flex space-x-6 mb-12">
+                    {% for social in social_links %}
+                    <a href="{{ social.url }}" class="text-gray-400 hover:text-brand-red transition-colors"><i data-lucide="{{ social.icon }}" class="w-6 h-6"></i></a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="border-t border-brand-surfaceBorder pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2026 {{ site_title }}. All rights reserved.</p>
+                <p class="tag-font">{{ site_title | upper }}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFold(id) {
+            const content = document.getElementById(id);
+            const parent = content.parentElement;
+            content.classList.toggle('open');
+            parent.classList.toggle('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const menuBtn = document.getElementById('menu-btn');
+            const closeBtn = document.getElementById('close-btn');
+
+            function toggleMenu() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('open');
+            }
+
+            menuBtn.addEventListener('click', toggleMenu);
+            closeBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

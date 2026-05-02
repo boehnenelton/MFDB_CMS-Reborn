@@ -1,0 +1,99 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+    <!-- Featured Image at top -->
+    {% if featured_img_url %}
+    <div class="mb-12 rounded-2xl overflow-hidden border border-brand-surfaceBorder shadow-2xl">
+        <img src="{{ featured_img_url }}" alt="{{ page_title }}" class="w-full h-auto object-cover max-h-[400px]">
+    </div>
+    {% endif %}
+
+    <div class="flex flex-col lg:flex-row gap-12 mb-12">
+        <div class="lg:w-1/3">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="tag-font text-brand-red text-xs font-bold px-2 py-1 bg-brand-red/10 border border-brand-red/20 rounded uppercase">{{ category_name }}</span>
+                <span class="text-gray-500 text-xs tag-font uppercase">{{ created_at }}</span>
+            </div>
+            <h1 class="text-4xl font-inter font-extrabold mb-6">{{ page_title }}</h1>
+            
+            {% if author %}
+            <div class="flex items-center gap-3 mb-8 p-3 bg-brand-surface/50 border border-brand-surfaceBorder rounded-xl">
+                <div class="w-10 h-10 rounded-full overflow-hidden border border-brand-red bg-black/40">
+                    <img src="{{ author_img_url }}" alt="{{ author.name }}" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <p class="text-white text-xs font-bold">{{ author.name }}</p>
+                    <p class="text-gray-500 text-[10px] uppercase tracking-wider">Project Architect</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="prose prose-invert text-gray-400 font-roboto leading-relaxed mb-8">
+                {{ html_body | safe }}
+            </div>
+            <button class="bg-brand-red hover:bg-brand-redHover text-white px-6 py-3 rounded-lg font-inter font-bold transition-all flex items-center justify-center gap-2">
+                <i data-lucide="download" class="w-5 h-5"></i> Download Project ZIP
+            </button>
+        </div>
+
+        <div class="lg:w-2/3">
+            <div class="bg-brand-surface border border-brand-surfaceBorder rounded-xl overflow-hidden flex flex-col h-[600px] shadow-2xl">
+                <!-- Horizontally Scrolling Tabs -->
+                <div class="bg-brand-dark/50 border-b border-brand-surfaceBorder flex items-center justify-between overflow-hidden">
+                    <div id="tab-container" class="flex overflow-x-auto no-scrollbar scroll-smooth flex-grow">
+                        {% for file in source_files %}
+                        <button onclick="switchFile('{{ loop.index0 }}')" 
+                                class="file-tab px-6 py-4 text-xs font-bold tag-font tracking-tight uppercase whitespace-nowrap transition-all border-b-2 border-transparent hover:text-white {% if loop.first %}active text-brand-red border-brand-red bg-brand-red/5{% else %}text-gray-500{% endif %}"
+                                data-index="{{ loop.index0 }}">
+                            {{ file.filename }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                    <div class="flex items-center px-4 border-l border-brand-surfaceBorder bg-brand-surface">
+                        <button class="text-gray-500 hover:text-brand-red transition-colors p-2" title="Copy Current File" onclick="copyCurrentCode()">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Content Area -->
+                <div class="flex-grow overflow-auto p-6 bg-[#050505] font-mono text-sm leading-relaxed text-gray-300 relative">
+                    {% for file in source_files %}
+                    <pre id="code-block-{{ loop.index0 }}" class="code-pre {% if not loop.first %}hidden{% endif %}"><code>{{ file.content }}</code></pre>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .file-tab.active { color: #fe3626 !important; border-color: #fe3626 !important; background: rgba(254, 54, 38, 0.05); }
+</style>
+
+<script>
+    let currentIdx = 0;
+    function switchFile(idx) {
+        // Hide all code blocks
+        document.querySelectorAll('.code-pre').forEach(pre => pre.classList.add('hidden'));
+        // Show selected
+        document.getElementById('code-block-' + idx).classList.remove('hidden');
+        
+        // Update tabs
+        document.querySelectorAll('.file-tab').forEach(tab => {
+            tab.classList.remove('active', 'text-brand-red', 'border-brand-red', 'bg-brand-red/5');
+            tab.classList.add('text-gray-500');
+        });
+        const activeTab = document.querySelector(`.file-tab[data-index="${idx}"]`);
+        activeTab.classList.add('active', 'text-brand-red', 'border-brand-red', 'bg-brand-red/5');
+        activeTab.classList.remove('text-gray-500');
+        
+        currentIdx = idx;
+    }
+
+    function copyCurrentCode() {
+        const code = document.getElementById('code-block-' + currentIdx).innerText;
+        navigator.clipboard.writeText(code);
+        // Visual feedback could be added here
+    }
+</script>

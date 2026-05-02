@@ -1,0 +1,67 @@
+<div class="relative overflow-hidden">
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+            <span class="tag-font text-brand-red border border-brand-red/30 bg-brand-red/10 px-3 py-1 rounded-full text-sm font-semibold tracking-wide mb-6 inline-block uppercase">
+                {{ site_tagline }}
+            </span>
+            <h1 class="text-5xl md:text-7xl font-extrabold font-inter tracking-tight mb-8 leading-tight">
+                {{ hero_title }}
+            </h1>
+            <p class="text-xl text-gray-400 mb-10 font-roboto font-light leading-relaxed">
+                {{ site_description }}
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#latest" class="bg-brand-red hover:bg-brand-redHover text-white px-8 py-4 rounded font-inter font-bold text-lg transition-all shadow-[0_0_20px_rgba(254,54,38,0.3)]">
+                    Explore Content
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Hero Image -->
+    {% if featured_hero_img %}
+    <div class="max-w-6xl mx-auto px-4 pb-24">
+        <div class="rounded-xl overflow-hidden border border-brand-surfaceBorder shadow-2xl relative bg-black/50">
+            <img src="{{ featured_hero_img }}" alt="Platform Preview" class="w-full h-[400px] object-contain opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark to-transparent"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Content Feed Section -->
+    <div id="latest" class="bg-brand-surface border-y border-brand-surfaceBorder py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-inter font-bold mb-4">Latest Additions</h2>
+                <p class="text-gray-400 tag-font">// {{ site_tagline }}</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {{ latest_items_grid }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center mb-16 text-center gap-4">
+            <div>
+                <h2 class="text-3xl font-inter font-bold mb-4">Browse by Category</h2>
+                <p class="text-gray-400 tag-font">// explore specialized content</p>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for cat in categories %}
+            <a href="{{ cat.slug }}/index.html" class="group bg-brand-surface border border-brand-surfaceBorder p-8 rounded-xl hover:border-brand-red transition-all flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-brand-dark rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="folder" class="w-8 h-8 text-brand-red"></i>
+                </div>
+                <h3 class="font-bold text-xl mb-2">{{ cat.name }}</h3>
+                <p class="text-gray-400 text-sm">{{ cat.description }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

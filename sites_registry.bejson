@@ -1,0 +1,16 @@
+{
+  "Format": "BEJSON",
+  "Format_Version": "104db",
+  "Schema_Name": "MultiSiteRegistry",
+  "Records_Type": ["SiteEntry"],
+  "Fields": [
+    {"name": "Record_Type_Parent", "type": "string"},
+    {"name": "site_id", "type": "string"},
+    {"name": "site_name", "type": "string"},
+    {"name": "data_path", "type": "string"},
+    {"name": "is_active", "type": "boolean"}
+  ],
+  "Values": [
+    ["SiteEntry", "default", "Primary Site", "Data", true]
+  ]
+}
