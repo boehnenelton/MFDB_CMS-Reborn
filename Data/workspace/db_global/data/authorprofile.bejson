@@ -24,12 +24,5 @@
       "type": "string"
     }
   ],
-  "Values": [
-    [
-      "c46eab05-3e59-4b6d-8203-c6b3f9a64f2c",
-      "Elton Boehnen",
-      "Lead Architect of the BEJSON standard and developer of the MFDB CMS ecosystem.",
-      "author-elton.png"
-    ]
-  ]
+  "Values": []
 }

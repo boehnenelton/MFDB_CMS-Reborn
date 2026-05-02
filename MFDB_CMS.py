@@ -40,7 +40,20 @@ _IMG_ONERROR = "this.src='data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D%22htt
 
 DATA_ROOT = os.path.join(BASE_DIR, "Data")
 WWW_ROOT = os.path.join(BASE_DIR, "Processing", "www")
-cms = MFDB_CMS_Manager(DATA_ROOT)
+# Multi-Site Multi-Tenant Patch
+SITES_REGISTRY = os.path.join(BASE_DIR, "sites_registry.bejson")
+def get_active_site():
+    try:
+        reg = BEJSONCore.bejson_core_load_file(SITES_REGISTRY)
+        idx_path = BEJSONCore.bejson_core_get_field_index(reg, "data_path")
+        idx_active = BEJSONCore.bejson_core_get_field_index(reg, "is_active")
+        for row in reg["Values"]:
+            if row[idx_active]: return os.path.join(BASE_DIR, row[idx_path])
+    except: pass
+    return DATA_ROOT
+
+ACTIVE_SITE_DATA = get_active_site()
+cms = MFDB_CMS_Manager(ACTIVE_SITE_DATA)
 
 # Global for preview server
 _preview_srv = {

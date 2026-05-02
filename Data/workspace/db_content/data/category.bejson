@@ -30,36 +30,6 @@
       "uncategorized",
       "General posts",
       "blog"
-    ],
-    [
-      "Projects",
-      "projects",
-      "Detailed technical analysis and system projects.",
-      "blog"
-    ],
-    [
-      "BEJSON",
-      "bejson",
-      "Core BEJSON standards and tools.",
-      "blog"
-    ],
-    [
-      "Resources",
-      "resources",
-      "Video tutorials and external assets.",
-      "blog"
-    ],
-    [
-      "Apps",
-      "apps",
-      "Interactive BEJSON tools and utilities.",
-      "blog"
-    ],
-    [
-      "GitHub Projects",
-      "github",
-      "Automatic feed from GitHub repositories.",
-      "code"
     ]
   ]
 }

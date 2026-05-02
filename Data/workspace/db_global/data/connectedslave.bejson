@@ -4,33 +4,39 @@
   "Format_Creator": "Elton Boehnen",
   "Parent_Hierarchy": "../104a.mfdb.bejson",
   "Records_Type": [
-    "MediaAsset"
+    "ConnectedSlave"
   ],
   "Fields": [
     {
-      "name": "filename",
+      "name": "label",
       "type": "string"
     },
     {
-      "name": "original_name",
+      "name": "url",
       "type": "string"
     },
     {
-      "name": "file_hash",
+      "name": "role",
       "type": "string"
     },
     {
-      "name": "file_size",
-      "type": "integer"
-    },
-    {
-      "name": "mime_type",
+      "name": "status",
       "type": "string"
     },
     {
-      "name": "uploaded_at",
-      "type": "string"
+      "name": "supported_entities",
+      "type": "array"
     }
   ],
-  "Values": []
+  "Values": [
+    [
+      "Audit-Node",
+      "http://localhost:9999",
+      "Slave",
+      "Active",
+      [
+        "Post"
+      ]
+    ]
+  ]
 }
