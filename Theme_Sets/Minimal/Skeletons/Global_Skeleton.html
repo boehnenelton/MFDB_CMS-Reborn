@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 2em; line-height: 1.6; }
+        nav { margin-bottom: 2em; border-bottom: 1px solid #eee; padding-bottom: 1em; }
+        a { color: #333; text-decoration: none; margin-right: 1em; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        {% for cat in categories %}
+        <a href="/category/{{ cat.slug }}">{{ cat.name }}</a>
+        {% endfor %}
+    </nav>
+    <main>
+        {{ content }}
+    </main>
+</body>
+</html>
