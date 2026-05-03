@@ -29,6 +29,12 @@
       "Uncategorized",
       "uncategorized",
       "General posts",
+      "card-grid"
+    ],
+    [
+      "Test Feed Category",
+      "test-feed",
+      "Category created for testing feed generation.",
       "blog"
     ]
   ]

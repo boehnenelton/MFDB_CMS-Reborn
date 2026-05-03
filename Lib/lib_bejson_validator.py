@@ -1,10 +1,11 @@
 """
 Library:     lib_bejson_validator.py
-Jurisdiction: ["PYTHON", "CORE_COMMAND"]
-Status:      OFFICIAL
+Family:      Core
+Jurisdiction: ["PYTHON", "SWITCH_CORE"]
+Status:      OFFICIAL — Core-Command/Lib (v1.21)
 Author:      Elton Boehnen
-Version:     1.4 (OFFICIAL)
-Date:        2026-04-27
+Version:     1.3 OFFICIAL
+Date:        2026-05-01
 Description: BEJSON validator — schema validation for 104, 104a, 104db.
 """
 import json

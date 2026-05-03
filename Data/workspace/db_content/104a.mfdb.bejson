@@ -42,7 +42,7 @@
       "Category",
       "data/category.bejson",
       null,
-      1,
+      2,
       "1.0",
       "slug"
     ],
@@ -50,7 +50,7 @@
       "Page",
       "data/page.bejson",
       null,
-      0,
+      6,
       "1.0",
       "page_uuid"
     ],
@@ -58,7 +58,7 @@
       "PageContent",
       "data/pagecontent.bejson",
       null,
-      0,
+      6,
       "1.0",
       null
     ],

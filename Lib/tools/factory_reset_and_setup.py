@@ -133,9 +133,10 @@ def run():
     
     # 3. Create Page
     print("[+] Creating CMS Page...")
+    analysis_path = "/data/data/com.termux/files/home/lib/docs/cms/Critical_Analysis_MFDB_CMS_v1.21.md"
     content_data = {
         "html_body": styled_html,
-        "markdown_body": Path("/storage/emulated/0/dev/docs/cms/Critical_Analysis_MFDB_CMS_v1.21.md").read_text(),
+        "markdown_body": Path(analysis_path).read_text(),
         "featured_img": stock_img_name
     }
     

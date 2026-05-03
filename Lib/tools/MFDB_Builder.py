@@ -95,7 +95,7 @@ class MFDB_Builder:
                 print(f"[ERROR] Failed to copy apps: {e}")
 
     def _copy_assets(self):
-        """Copy media library assets to the static build assets folder."""
+        """Copy media library assets and system assets to the static build assets folder."""
         assets_dest = os.path.join(self.output_dir, "assets")
         if os.path.exists(assets_dest):
             shutil.rmtree(assets_dest)
@@ -103,6 +103,8 @@ class MFDB_Builder:
         
         success_count = 0
         fail_count = 0
+        
+        # 1. Copy Content Assets
         if os.path.exists(self.cms.assets_dir):
             for item in os.listdir(self.cms.assets_dir):
                 s = os.path.join(self.cms.assets_dir, item)
@@ -112,8 +114,28 @@ class MFDB_Builder:
                         shutil.copy2(s, d)
                         success_count += 1
                     except Exception as e:
-                        print(f"[ERROR] Failed to copy {item}: {e}")
+                        print(f"[ERROR] Failed to copy content asset {item}: {e}")
                         fail_count += 1
+        
+        # 2. Copy System Assets (e.g., default-feature.png)
+        system_assets_dir = os.path.join(PROJECT_ROOT, "Assets")
+        # Special case: Copy MFDBCMS.png from root if it exists
+        root_stock_img = os.path.join(PROJECT_ROOT, "MFDBCMS.png")
+        if os.path.exists(root_stock_img):
+            shutil.copy2(root_stock_img, os.path.join(assets_dest, "MFDBCMS.png"))
+            success_count += 1
+        if os.path.exists(system_assets_dir):
+            for item in os.listdir(system_assets_dir):
+                s = os.path.join(system_assets_dir, item)
+                d = os.path.join(assets_dest, item)
+                if os.path.isfile(s):
+                    try:
+                        shutil.copy2(s, d)
+                        success_count += 1
+                    except Exception as e:
+                        print(f"[ERROR] Failed to copy system asset {item}: {e}")
+                        fail_count += 1
+
         print(f"[ASSETS] Copy complete. Success: {success_count}, Failed: {fail_count}")
 
     def _get_content_preview(self, html: str, length: int = 120) -> str:
@@ -162,7 +184,7 @@ class MFDB_Builder:
                 # Requirement: Always take msdb default image if none assigned
                 img = p.get("featured_img")
                 if not img or str(img).lower() == "none" or img == "":
-                    img = "default-feature.png"
+                    img = "MFDBCMS.png"
 
                 all_items.append({
                     "title": p["title"],
@@ -180,7 +202,7 @@ class MFDB_Builder:
             for a in apps:
                 img = a.get("featured_img")
                 if not img or str(img).lower() == "none" or img == "":
-                    img = "default-feature.png"
+                    img = "MFDBCMS.png"
 
                 all_items.append({
                     "title": a["name"],
@@ -203,7 +225,7 @@ class MFDB_Builder:
         # Requirement: Default to default-feature.png
         img = item.get("img")
         if not img or str(img).lower() == "none" or img == "":
-            img = "default-feature.png"
+            img = "MFDBCMS.png"
         img_url = f"{rel_prefix}assets/{img}"
         
         feed_type = "blog" if force_blog else item.get("feed_type", "blog")
@@ -304,7 +326,7 @@ class MFDB_Builder:
             # Requirement: Always take msdb default image if none assigned
             img = p.get("featured_img")
             if not img or str(img).lower() == "none" or img == "":
-                img = "default-feature.png"
+                img = "MFDBCMS.png"
 
             all_items.append({
                 "title": p["title"],
@@ -372,7 +394,7 @@ class MFDB_Builder:
         # Requirement: Fallback to default-feature.png
         feat_img = page_data.get('featured_img')
         if not feat_img or str(feat_img).lower() == "none" or feat_img == "":
-            feat_img = "default-feature.png"
+            feat_img = "MFDBCMS.png"
             
         page_data["featured_img"] = feat_img
         page_data["featured_img_url"] = f"{rel_prefix}assets/{feat_img}"
@@ -390,7 +412,7 @@ class MFDB_Builder:
                 # Defensive check for None/Empty
                 rp_img = rp.get("featured_img")
                 if not rp_img or str(rp_img).lower() == "none" or rp_img == "":
-                    rp_img = "default-feature.png"
+                    rp_img = "MFDBCMS.png"
                     
                 rp_copy["featured_img_url"] = f"{rel_prefix}assets/{rp_img}"
                 rp_copy["url"] = f"../{rp['slug']}/index.html"

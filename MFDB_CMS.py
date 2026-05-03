@@ -1,7 +1,7 @@
 """
-MFDB CMS REBORN - Core Application
-Description: Rebuilt CMS using Multi-File Database (MFDB) standard.
-             v1.2: Implements Archive Transport (Mount-Commit) and Dirty State tracking.
+Project: MFDB CMS Reborn
+Project Version: v1.3
+MFDB Version: v1.3
 """
 import os
 import sys

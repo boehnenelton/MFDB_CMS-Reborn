@@ -1,10 +1,11 @@
 """
 Library:     lib_mfdb_core.py
-Jurisdiction: ["PYTHON", "CORE_COMMAND"]
+Family:      Core
+Jurisdiction: ["PYTHON", "SWITCH_CORE"]
 Status:      OFFICIAL — Core-Command/Lib (v1.3)
 Author:      Elton Boehnen
-Version:     1.3 (OFFICIAL) Federation & Smart Recovery
-Date:        2026-04-30
+Version:     1.3 OFFICIAL
+Date:        2026-05-01
 Description: MFDB (Multifile Database) core operations.
              Layers on lib_bejson_core.py and lib_mfdb_validator.py.
              Provides create, read, write, query, join, and sync

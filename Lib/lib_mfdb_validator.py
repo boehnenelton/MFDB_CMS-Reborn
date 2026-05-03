@@ -1,10 +1,11 @@
 """
 Library:     lib_mfdb_validator.py
-Jurisdiction: ["PYTHON", "CORE_COMMAND"]
+Family:      Core
+Jurisdiction: ["PYTHON", "SWITCH_CORE"]
 Status:      OFFICIAL — Core-Command/Lib (v1.3)
 Author:      Elton Boehnen
-Version:     1.3 (OFFICIAL) Federation & Smart Recovery
-Date:        2026-04-30
+Version:     1.3 OFFICIAL
+Date:        2026-05-01
 Description: Standard validator for MFDB (Multifile Database) structures.
              Layers on lib_bejson_validator.py.
              v1.2 adds support for validating .mfdb.zip archives.

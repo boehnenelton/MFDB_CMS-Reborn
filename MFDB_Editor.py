@@ -1,7 +1,7 @@
 """
-MFDB Editor - Standalone Content Editor
-Description: A specialized editor for MFDB-CMS-Reborn.
-             Provides dynamic, type-specific specialized views.
+Project: MFDB CMS Reborn
+Project Version: v1.3
+MFDB Version: v1.3
 """
 import os
 import sys
@@ -25,6 +25,7 @@ cms = MFDB_CMS_Manager(DATA_ROOT)
 
 # Ensure system is initialized
 cms.initialize_system()
+cms.mount_system(force=True)
 
 # =============================================================================
 # ROUTES
@@ -300,6 +301,9 @@ def save():
             cms.update_page(page_uuid, title, cat, ptype, content_data)
         else:
             cms.create_page(title, cat, ptype, content_data)
+        
+        # Commit changes to master archives
+        cms.repack_system()
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500

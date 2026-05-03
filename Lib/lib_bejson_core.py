@@ -1,10 +1,11 @@
 """
 Library:     lib_bejson_core.py
-Jurisdiction: ["PYTHON", "CORE_COMMAND"]
+Family:      Core
+Jurisdiction: ["PYTHON", "SWITCH_CORE"]
 Status:      OFFICIAL
 Author:      Elton Boehnen
-Version:     1.4 (OFFICIAL)
-Date:        2026-04-27
+Version:     1.3 OFFICIAL
+Date:        2026-05-01
 Description: BEJSON (Boehnen Elton JSON) core library — document creation, mutation, validation,
              atomic file I/O with fsync, and query/sort utilities.
              MFDB relational functions are in lib_mfdb_core.py (decoupled).

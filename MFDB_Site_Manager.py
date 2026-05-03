@@ -1,7 +1,7 @@
 """
-MFDB Site Manager - Configuration & Preview Tool
-Description: Handles site-wide settings, sitemap generation triggers, 
-             and provides a local preview server for the static build.
+Project: MFDB CMS Reborn
+Project Version: v1.3
+MFDB Version: v1.3
 """
 import os
 import sys
